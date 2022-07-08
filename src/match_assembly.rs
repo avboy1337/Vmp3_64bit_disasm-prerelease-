@@ -134,12 +134,33 @@ pub fn match_store_reg2_in_reg1(instruction: &Instruction,
     Some(instruction_size)
 }
 
+pub fn match_xchng_reg(instruction: &Instruction,
+                       reg: Register)
+                       -> bool {
+    match instruction.code() {
+        Code::Xchg_rm64_r64 | Code::Xchg_r64_RAX => {
+            if (instruction.op0_register() == reg.full_register() ||
+                instruction.op1_register() == reg.full_register()) &&
+               instruction.op0_register() != instruction.op1_register()
+            {
+                true
+            } else {
+                false
+            }
+        },
+        _ => false,
+    }
+}
+
 pub fn match_shl_reg_reg(instruction: &Instruction,
                          reg: Register)
                          -> bool {
     match instruction.code() {
-        Code::Shl_rm8_CL | Code::Shl_rm16_CL | Code::Shl_rm32_CL | Code::Shl_rm64_CL
-            if (instruction.op0_register().full_register() == reg) =>
+        Code::Shl_rm8_CL |
+        Code::Shl_rm16_CL |
+        Code::Shl_rm32_CL |
+        Code::Shl_rm64_CL
+            if (instruction.op0_register().full_register() == reg.full_register()) =>
         {
             true
         },
@@ -152,8 +173,43 @@ pub fn match_shr_reg_reg(instruction: &Instruction,
                          reg: Register)
                          -> bool {
     match instruction.code() {
-        Code::Shr_rm8_CL | Code::Shr_rm16_CL | Code::Shr_rm32_CL | Code::Shr_rm64_CL
-            if (instruction.op0_register().full_register() == reg) =>
+        Code::Shr_rm8_CL |
+        Code::Shr_rm16_CL |
+        Code::Shr_rm32_CL |
+        Code::Shr_rm64_CL
+            if (instruction.op0_register().full_register() == reg.full_register()) =>
+        {
+            true
+        },
+
+        _ => false,
+    }
+}
+
+pub fn match_shrd_reg_reg(instruction: &Instruction,
+                         reg: Register)
+                         -> bool {
+    match instruction.code() {
+        Code::Shrd_rm16_r16_CL |
+        Code::Shrd_rm32_r32_CL |
+        Code::Shrd_rm64_r64_CL
+            if (instruction.op0_register().full_register() == reg.full_register()) =>
+        {
+            true
+        },
+
+        _ => false,
+    }
+}
+
+pub fn match_shld_reg_reg(instruction: &Instruction,
+                         reg: Register)
+                         -> bool {
+    match instruction.code() {
+        Code::Shld_rm16_r16_CL |
+        Code::Shld_rm32_r32_CL |
+        Code::Shld_rm64_r64_CL
+            if (instruction.op0_register().full_register() == reg.full_register()) =>
         {
             true
         },
@@ -398,6 +454,41 @@ pub fn match_fetch_vm_reg(instruction: &Instruction,
 
     true
 }
+
+pub fn match_store_vm_reg(instruction: &Instruction,
+                          index_reg: Register)
+                          -> bool {
+    // Check the instruction opcode
+    if instruction.code() != Code::Mov_rm64_r64 &&
+       instruction.code() != Code::Mov_rm32_r32 &&
+       instruction.code() != Code::Mov_rm16_r16 &&
+       instruction.code() != Code::Mov_rm8_r8
+    {
+        return false;
+    }
+    // Check that the second operand is a memory type operand
+    if instruction.op0_kind() != OpKind::Memory {
+        return false;
+    }
+
+    // Check that the displacement is 0
+    if instruction.memory_displacement64() != 0x0 {
+        return false;
+    }
+
+    // Check that the index register is rsp
+    if instruction.memory_base() != Register::RSP {
+        return false;
+    }
+
+    // Check that the index register is index_reg
+    if instruction.memory_index() != index_reg {
+        return false;
+    }
+
+    true
+}
+
 pub fn match_fetch_encrypted_vip(instruction: &Instruction,
                                  vm_register_allocation: &VmRegisterAllocation)
                                  -> bool {

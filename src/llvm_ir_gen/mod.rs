@@ -40,7 +40,8 @@ impl<'ctx> VmLifter<'ctx> {
     pub fn slice_vip(&self,
                      control_flow_graph: &GraphMap<u64, (), petgraph::Directed>,
                      mut input_vip: u64,
-                     root_vip: u64)
+                     root_vip: u64,
+                     max_pred_block_count: Option<u64>)
                      -> Result<Vec<u64>, Box<dyn Error>> {
         self.output_module();
 
@@ -50,6 +51,7 @@ impl<'ctx> VmLifter<'ctx> {
         let dominator_info = dominators::simple_fast(control_flow_graph, root_vip);
         println!("Done computing dominators");
 
+        let mut loopcount = 0;
         'outer: loop {
             let pred_nodes = control_flow_graph.edges_directed(input_vip, Incoming)
                                                .map(|edge| edge.0)
@@ -68,7 +70,15 @@ impl<'ctx> VmLifter<'ctx> {
                 }
             }
 
+            loopcount += 1;
+            println!("Loop iteration -> {}", loopcount);
             slice_blocks.extend_from_slice(&temp_slice_blocks);
+
+            if let Some(max_count) = max_pred_block_count {
+                if loopcount == max_count {
+                    break 'outer;
+                }
+            }
         }
 
         self.create_helper_slicevpc(&slice_blocks);
@@ -327,6 +337,12 @@ impl<'ctx> VmLifter<'ctx> {
             HandlerVmInstruction::Shl(size) => {
                 self.lift_generic_handler(*size, "SHL", helper_stub);
             },
+            HandlerVmInstruction::Shrd(size) => {
+                self.lift_generic_handler(*size, "SHRD", helper_stub);
+            },
+            HandlerVmInstruction::Shld(size) => {
+                self.lift_generic_handler(*size, "SHLD", helper_stub);
+            },
             HandlerVmInstruction::Nand(size) => {
                 self.lift_generic_handler(*size, "NAND", helper_stub);
             },
@@ -353,6 +369,15 @@ impl<'ctx> VmLifter<'ctx> {
             },
             HandlerVmInstruction::JumpIncVspChange => {
                 self.lift_jump_sem(helper_stub, "JUMP_INC");
+            },
+            HandlerVmInstruction::JumpDecVspXchng => {
+                self.lift_jump_sem(helper_stub, "JUMP_DEC");
+            },
+            HandlerVmInstruction::JumpIncVspXchng => {
+                self.lift_jump_sem(helper_stub, "JUMP_INC");
+            },
+            HandlerVmInstruction::Nop => {
+                // Yep nothing
             },
             HandlerVmInstruction::UnknownByteOperand => todo!("Unkwnown handler"),
             HandlerVmInstruction::UnknownWordOperand => todo!("Unkwnown handler"),
@@ -497,6 +522,27 @@ impl<'ctx> VmLifter<'ctx> {
                 },
                 _ => unreachable!(),
             },
+
+            1 => {
+                assert!(intra_register_offset == 1 || intra_register_offset == 0);
+                match intra_register_offset {
+                    0 => {
+                        let sem_push_vmreg8_low = self.get_semantic("SEM_PUSH_VMREG_8_LOW");
+
+                        self.builder.build_call(sem_push_vmreg8_low,
+                                                &[vsp.into(), select_vm_reg.into()],
+                                                "");
+                    },
+                    1 => {
+                        let sem_push_vmreg8_high = self.get_semantic("SEM_PUSH_VMREG_8_HIGH");
+
+                        self.builder.build_call(sem_push_vmreg8_high,
+                                                &[vsp.into(), select_vm_reg.into()],
+                                                "");
+                    },
+                    _ => unreachable!(),
+                }
+            },
             _ => todo!(),
         }
     }
@@ -573,6 +619,27 @@ impl<'ctx> VmLifter<'ctx> {
                         .build_call(sem_pop_vmreg16_highhigh, &[vsp.into(), vm_regs.into()], "");
                 },
                 _ => unreachable!(),
+            },
+
+            1 => {
+                assert!(intra_register_offset == 1 || intra_register_offset == 0);
+                match intra_register_offset {
+                    0 => {
+                        let sem_pop_vmreg8_low = self.get_semantic("SEM_POP_VMREG_8_LOW");
+
+                        self.builder.build_call(sem_pop_vmreg8_low,
+                                                &[vsp.into(), select_vm_reg.into()],
+                                                "");
+                    },
+                    1 => {
+                        let sem_pop_vmreg8_high = self.get_semantic("SEM_POP_VMREG_8_HIGH");
+
+                        self.builder.build_call(sem_pop_vmreg8_high,
+                                                &[vsp.into(), select_vm_reg.into()],
+                                                "");
+                    },
+                    _ => unreachable!(),
+                }
             },
             _ => todo!(),
         }

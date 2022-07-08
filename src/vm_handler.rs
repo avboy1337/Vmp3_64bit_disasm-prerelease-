@@ -4,7 +4,7 @@ use crate::{
     util::*,
     vm_matchers::{self, HandlerClass, HandlerVmInstruction},
 };
-use iced_x86::{Code, Instruction, OpKind};
+use iced_x86::{Code, Instruction, OpKind, Register};
 use pelite::pe64::PeFile;
 
 #[derive(Debug, Clone)]
@@ -131,10 +131,13 @@ impl VmContext {
                                  -> Self {
         let jump_handler_address = last_handler.2;
         let (direction_is_forwards, changed_vsp) = match last_handler.1 {
+            HandlerVmInstruction::JumpDecVspXchng => (false, true),
+            HandlerVmInstruction::JumpIncVspXchng => (true, true),
             HandlerVmInstruction::JumpDecVspChange => (false, true),
             HandlerVmInstruction::JumpIncVspChange => (true, true),
             HandlerVmInstruction::JumpDec => (false, false),
             HandlerVmInstruction::JumpInc => (true, false),
+            HandlerVmInstruction::Nop => (self.vip_direction_forwards, false),
             _ => panic!("Not a branch instruction"),
         };
 
@@ -142,9 +145,35 @@ impl VmContext {
 
         let vm_jump_handler = VmHandler::new(jump_handler_address, pe_file, pe_bytes);
 
-        vm_jump_handler.get_register_allocation_vm_jump(changed_vsp,
+        match last_handler.1 {
+            HandlerVmInstruction::JumpDecVspXchng => {
+                vm_jump_handler.get_register_allocation_vm_jump_xchng(
                                                         &mut new_vm_context.register_allocation);
-
+            },
+            HandlerVmInstruction::JumpIncVspXchng => {
+                vm_jump_handler.get_register_allocation_vm_jump_xchng(
+                                                        &mut new_vm_context.register_allocation);
+            },
+            HandlerVmInstruction::JumpDecVspChange => {
+                vm_jump_handler.get_register_allocation_vm_jump(changed_vsp,
+                                                        &mut new_vm_context.register_allocation);
+            },
+            HandlerVmInstruction::JumpIncVspChange => {
+                vm_jump_handler.get_register_allocation_vm_jump(changed_vsp,
+                                                        &mut new_vm_context.register_allocation);
+            },
+            HandlerVmInstruction::JumpDec => {
+                vm_jump_handler.get_register_allocation_vm_jump(changed_vsp,
+                                                        &mut new_vm_context.register_allocation);
+            },
+            HandlerVmInstruction::JumpInc => {
+                vm_jump_handler.get_register_allocation_vm_jump(changed_vsp,
+                                                        &mut new_vm_context.register_allocation);
+            },
+            HandlerVmInstruction::Nop => {},
+            _ => panic!("Not a branch instruction"),
+        };
+        println!("{:#x?}", new_vm_context);
         // Rolling key is initialized to the initial vip
         let mut vip = if direction_is_forwards {
             jump_target_vip - 4
@@ -210,8 +239,8 @@ impl VmContext {
 
             let handler_class = vm_handler.match_handler_class(&self.register_allocation);
             let handler_address = self.handler_address;
-            #[allow(unused_assignments)]
-            let mut handler_instruction = vm_matchers::HandlerVmInstruction::Unknown;
+
+            let handler_instruction;
 
             let vip = self.vip_value;
 
@@ -262,6 +291,19 @@ impl VmContext {
                     self.disassemble_no_operand(&vm_handler, pe_file, pe_bytes);
                     handler_instruction =
                         vm_handler.match_no_operand_instructions(self, &self.register_allocation);
+                    match handler_instruction {
+                        HandlerVmInstruction::JumpDecVspXchng |
+                        HandlerVmInstruction::JumpIncVspXchng |
+                        HandlerVmInstruction::JumpDecVspChange |
+                        HandlerVmInstruction::JumpIncVspChange |
+                        HandlerVmInstruction::JumpDec |
+                        HandlerVmInstruction::JumpInc |
+                        HandlerVmInstruction::Nop => {
+                            halt = true;
+                        },
+
+                        _ => {},
+                    }
                 },
             }
             handlers.push((vip, handler_instruction, handler_address));
@@ -416,6 +458,7 @@ impl VmContext {
                                                        !match_xor_16_rolling_key_source(insn,
                                                                        &self.register_allocation)
                                                    });
+
         let encrypted_reg = instruction_iter.next().unwrap().op0_register();
 
         let encryption_iter = instruction_iter.take_while(|insn| {
@@ -647,6 +690,55 @@ impl VmHandler {
                                vsp,
                                key,
                                handler_address: handler_address_reg }
+    }
+
+    pub fn get_register_allocation_vm_jump_xchng(&self,
+                                                 old_register_allocation: &mut VmRegisterAllocation)
+    {
+        let mut instruction_iter = self.instructions.iter();
+        let mov_to_vip =
+            instruction_iter.find(|insn| {
+                match_fetch_reg_any_size(insn, old_register_allocation.vsp.into()).is_some()
+            });
+
+        let new_vip = mov_to_vip.unwrap().op0_register().full_register();
+
+        let _add_vsp_instruction =
+            instruction_iter.find(|insn| {
+                                match_add_vsp_get_amount(insn, old_register_allocation).is_some()
+                            });
+
+        let xchng = instruction_iter.find(|insn| match_xchng_reg(insn, new_vip));
+
+        let new_vsp_value_reg;
+        let new_vip_reg: Register;
+
+        match xchng {
+            Some(xchng_insn) => {
+                if !(xchng_insn.op0_register() == new_vip &&
+                     xchng_insn.op1_register() == old_register_allocation.vsp.into()) &&
+                   !(xchng_insn.op1_register() == new_vip &&
+                     xchng_insn.op0_register() == old_register_allocation.vsp.into())
+                {
+                    panic!();
+                } else {
+                    new_vsp_value_reg = new_vip;
+                    new_vip_reg = old_register_allocation.vsp.into();
+                }
+            },
+            None => panic!(),
+        }
+        let mov_new_vsp =
+            instruction_iter.find(|insn| match_mov_reg_source(insn, new_vsp_value_reg));
+        let new_vsp_reg = mov_new_vsp.unwrap().op0_register().full_register();
+
+        let store_key_reg = instruction_iter.find(|insn| match_mov_reg_source(insn, new_vip_reg));
+
+        let new_key_register = store_key_reg.unwrap().op0_register();
+
+        old_register_allocation.vsp = new_vsp_reg.into();
+        old_register_allocation.vip = new_vip_reg.into();
+        old_register_allocation.key = new_key_register.into();
     }
 
     pub fn get_register_allocation_vm_jump(&self,

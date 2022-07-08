@@ -10,6 +10,5 @@ iced-x86 = "*"
 clap = {version = "*", features = ["derive"]}
 pelite = "*"
 haybale = { version = "*", features = ["llvm-13", "vendor-boolector"] }
-llvm-ir = "*"
 inkwell = { git = "https://github.com/TheDan64/inkwell", branch = "master", features = ["llvm13-0"] }
 petgraph = "*"
