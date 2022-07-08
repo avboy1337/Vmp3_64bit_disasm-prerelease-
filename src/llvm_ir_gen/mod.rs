@@ -34,7 +34,12 @@ impl<'ctx> VmLifter<'ctx> {
                             vm_context: &VmContext,
                             handlers: &[(u64, HandlerVmInstruction, u64)]) {
         let helper_stub = self.create_helper_stub(vm_context.initial_vip);
-        self.lift_into_helper_stub(vm_context, handlers, &helper_stub);
+        match helper_stub {
+            Some(helper_stub) => {
+                self.lift_into_helper_stub(vm_context, handlers, &helper_stub);
+            },
+            None => {},
+        }
     }
 
     pub fn slice_vip(&self,
@@ -248,9 +253,15 @@ impl<'ctx> VmLifter<'ctx> {
             }
         }
     }
+    /// If the helper stub already exists return `None`
     fn create_helper_stub(&self,
                           start_vip: u64)
-                          -> FunctionValue {
+                          -> Option<FunctionValue> {
+        let helper_stub_name = format!("helperstub_{:x}", start_vip);
+        if self.module.borrow().get_function(&helper_stub_name) != None {
+            return None;
+        }
+
         let helper_stub_def = self.module
                                   .borrow()
                                   .get_function("HelperStub")
@@ -259,9 +270,7 @@ impl<'ctx> VmLifter<'ctx> {
 
         let helper_stub = self.module
                               .borrow()
-                              .add_function(&format!("helperstub_{:x}", start_vip),
-                                            helper_stub_type,
-                                            None);
+                              .add_function(&helper_stub_name, helper_stub_type, None);
         let entry_bb = self.context.append_basic_block(helper_stub, "");
 
         let param_names = ["rax", "rbx", "rcx", "rdx", "rsi", "rdi", "rbp", "rsp", "r8", "r9",
@@ -289,7 +298,7 @@ impl<'ctx> VmLifter<'ctx> {
                 .create_enum_attribute(Attribute::get_named_enum_kind_id("alwaysinline"), 0),
         );
 
-        helper_stub
+        Some(helper_stub)
     }
 
     pub fn lift_vm_instruction(&self,
@@ -376,6 +385,9 @@ impl<'ctx> VmLifter<'ctx> {
             HandlerVmInstruction::JumpIncVspXchng => {
                 self.lift_jump_sem(helper_stub, "JUMP_INC");
             },
+            HandlerVmInstruction::PushCr0 => {
+                self.lift_generic_handler_unsized("PUSH_CR0", helper_stub);
+            },
             HandlerVmInstruction::Nop => {
                 // Yep nothing
             },
@@ -410,6 +422,17 @@ impl<'ctx> VmLifter<'ctx> {
 
         self.builder.build_call(semantic, &[vsp.into()], "");
     }
+
+    fn lift_generic_handler_unsized(&self,
+                                    sem_base_name: &str,
+                                    helper_stub: &FunctionValue) {
+        let vsp = get_param_vsp(helper_stub);
+
+        let semantic = self.get_semantic(&format!("SEM_{}", sem_base_name));
+
+        self.builder.build_call(semantic, &[vsp.into()], "");
+    }
+
     fn lift_push_imm64(&self,
                        imm64: u64,
                        helper_stub: &FunctionValue) {
@@ -970,7 +993,21 @@ impl<'ctx> VmLifter<'ctx> {
                     .build_conditional_branch(branch_selector, branch1, branch2);
             },
             _ => {
-                todo!();
+                let unreachable_bb = self.context
+                                         .append_basic_block(*helper_function, "unreachable");
+
+                let vip_value = self.builder.build_load(vip_arg, "vip_value");
+
+                let cases =
+                    successors.iter()
+                              .map(|succ| (i64_type.const_int(*succ, false), bbs_map[&succ]))
+                              .collect::<Vec<_>>();
+
+                self.builder
+                    .build_switch(vip_value.into_int_value(), unreachable_bb, &cases);
+
+                self.builder.position_at_end(unreachable_bb);
+                self.builder.build_unreachable();
             },
         }
     }

@@ -41,6 +41,7 @@ pub enum HandlerVmInstruction {
     Nor(usize),
     Fetch(usize),
     Store(usize),
+    PushCr0,
     Nop,
     VmExit,
     JumpDecVspChange,
@@ -125,6 +126,7 @@ impl Display for HandlerVmInstruction {
             HandlerVmInstruction::Nor(size) => write!(f, "nor{}", size * 8),
             HandlerVmInstruction::Fetch(size) => write!(f, "fetch{}", size * 8),
             HandlerVmInstruction::Store(size) => write!(f, "store{}", size * 8),
+            HandlerVmInstruction::PushCr0 => write!(f, "push_cr0"),
             HandlerVmInstruction::Nop => write!(f, "nop"),
             HandlerVmInstruction::VmExit => write!(f, "vm_exit"),
             HandlerVmInstruction::JumpDecVspXchng => write!(f, "jump_dec_vsp_xchng"),
@@ -437,6 +439,10 @@ impl VmHandler {
 
         if vm_match_nop(self) {
             return HandlerVmInstruction::Nop;
+        }
+
+        if vm_match_push_cr0(self) {
+            return HandlerVmInstruction::PushCr0;
         }
 
         HandlerVmInstruction::UnknownNoOperand
@@ -1084,8 +1090,8 @@ generate_binop_match_single_reg!(vm_match_shl, sub_match_shl);
 generate_binop_match_byte_single_reg!(vm_match_shl_byte, sub_match_shl);
 
 fn sub_match_shrd<'a, I>(instruction_iter: &mut I,
-                        reg: Register)
-                        -> Option<&'a Instruction>
+                         reg: Register)
+                         -> Option<&'a Instruction>
     where I: Iterator<Item = &'a Instruction>
 {
     instruction_iter.find(|insn| match_shrd_reg_reg(insn, reg))
@@ -1094,15 +1100,14 @@ fn sub_match_shrd<'a, I>(instruction_iter: &mut I,
 generate_binop_match_single_reg!(vm_match_shrd, sub_match_shrd);
 
 fn sub_match_shld<'a, I>(instruction_iter: &mut I,
-                        reg: Register)
-                        -> Option<&'a Instruction>
+                         reg: Register)
+                         -> Option<&'a Instruction>
     where I: Iterator<Item = &'a Instruction>
 {
     instruction_iter.find(|insn| match_shld_reg_reg(insn, reg))
 }
 
 generate_binop_match_single_reg!(vm_match_shld, sub_match_shld);
-
 
 fn vm_match_fetch(vm_handler: &VmHandler,
                   reg_allocation: &VmRegisterAllocation)
@@ -1228,6 +1233,12 @@ fn vm_match_vm_exit(vm_handler: &VmHandler,
     }
 
     true
+}
+
+fn vm_match_push_cr0(vm_handler: &VmHandler) -> bool {
+    let first_instruction = vm_handler.instructions[0];
+    (first_instruction.code() == Code::Mov_r64_cr) &&
+    first_instruction.op1_register() == Register::CR0
 }
 
 fn vm_match_nop(vm_handler: &VmHandler) -> bool {

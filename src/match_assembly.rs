@@ -156,10 +156,7 @@ pub fn match_shl_reg_reg(instruction: &Instruction,
                          reg: Register)
                          -> bool {
     match instruction.code() {
-        Code::Shl_rm8_CL |
-        Code::Shl_rm16_CL |
-        Code::Shl_rm32_CL |
-        Code::Shl_rm64_CL
+        Code::Shl_rm8_CL | Code::Shl_rm16_CL | Code::Shl_rm32_CL | Code::Shl_rm64_CL
             if (instruction.op0_register().full_register() == reg.full_register()) =>
         {
             true
@@ -173,10 +170,7 @@ pub fn match_shr_reg_reg(instruction: &Instruction,
                          reg: Register)
                          -> bool {
     match instruction.code() {
-        Code::Shr_rm8_CL |
-        Code::Shr_rm16_CL |
-        Code::Shr_rm32_CL |
-        Code::Shr_rm64_CL
+        Code::Shr_rm8_CL | Code::Shr_rm16_CL | Code::Shr_rm32_CL | Code::Shr_rm64_CL
             if (instruction.op0_register().full_register() == reg.full_register()) =>
         {
             true
@@ -187,12 +181,10 @@ pub fn match_shr_reg_reg(instruction: &Instruction,
 }
 
 pub fn match_shrd_reg_reg(instruction: &Instruction,
-                         reg: Register)
-                         -> bool {
+                          reg: Register)
+                          -> bool {
     match instruction.code() {
-        Code::Shrd_rm16_r16_CL |
-        Code::Shrd_rm32_r32_CL |
-        Code::Shrd_rm64_r64_CL
+        Code::Shrd_rm16_r16_CL | Code::Shrd_rm32_r32_CL | Code::Shrd_rm64_r64_CL
             if (instruction.op0_register().full_register() == reg.full_register()) =>
         {
             true
@@ -203,12 +195,10 @@ pub fn match_shrd_reg_reg(instruction: &Instruction,
 }
 
 pub fn match_shld_reg_reg(instruction: &Instruction,
-                         reg: Register)
-                         -> bool {
+                          reg: Register)
+                          -> bool {
     match instruction.code() {
-        Code::Shld_rm16_r16_CL |
-        Code::Shld_rm32_r32_CL |
-        Code::Shld_rm64_r64_CL
+        Code::Shld_rm16_r16_CL | Code::Shld_rm32_r32_CL | Code::Shld_rm64_r64_CL
             if (instruction.op0_register().full_register() == reg.full_register()) =>
         {
             true

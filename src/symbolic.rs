@@ -30,6 +30,12 @@ pub fn get_possible_solutions(function_name: &str) -> Result<Vec<u64>, Box<dyn E
                                                                            32)
                                                          .unwrap()))
                          });
+    config.function_hooks.add_inline_asm_hook(&|state, call| {
+                             let _arguments = call.get_arguments();
+                             Ok(ReturnValue::Return(state.new_bv_with_name("cr0".into(),
+                                                                           64)
+                                                         .unwrap()))
+                         });
     config.function_hooks
           .add_default_hook(&|_, _| Ok(ReturnValue::ReturnVoid));
 
