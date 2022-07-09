@@ -729,8 +729,13 @@ impl VmHandler {
             None => panic!(),
         }
         let mov_new_vsp =
-            instruction_iter.find(|insn| match_mov_reg_source(insn, new_vsp_value_reg));
-        let new_vsp_reg = mov_new_vsp.unwrap().op0_register().full_register();
+            instruction_iter.clone()
+                            .find(|insn| match_mov_reg_source(insn, new_vsp_value_reg));
+
+        let new_vsp_reg = match mov_new_vsp {
+            Some(insn) => insn.op0_register().full_register(),
+            None => new_vsp_value_reg,
+        };
 
         let store_key_reg = instruction_iter.find(|insn| match_mov_reg_source(insn, new_vip_reg));
 

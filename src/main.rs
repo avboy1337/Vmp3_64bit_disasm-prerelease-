@@ -38,7 +38,7 @@ struct CommandLineArgs {
     /// push <const>
     /// call vm_entry
     #[clap(short, long, parse(try_from_str = parse_hex_vm_call))]
-    pub vm_call_address: u64,
+    pub vm_call_addresses: Vec<u64>,
     /// Max blocks for slicing
     #[clap(long)]
     pub max_blocks:      Option<u64>,
@@ -52,35 +52,71 @@ fn main() -> Result<(), Box<dyn Error>> {
     let pe_file = PeFile::from_bytes(&map)?;
     let pe_bytes = std::fs::read(input_file)?;
 
-    let mut control_flow_graph = GraphMap::<u64, (), petgraph::Directed>::new();
-
+    // Create the `VmLifter`
     let vm_lifter = VmLifter::new();
 
-    let mut vm_context =
-        VmContext::new_from_vm_entry(&pe_file, &pe_bytes, command_line_args.vm_call_address);
+    // Lift all the functions specified
+    for address in command_line_args.vm_call_addresses.iter().cloned() {
+        explore_cfg_and_lift_function(&pe_file, &pe_bytes, address, &vm_lifter, command_line_args.max_blocks)?;
+    }
 
-    println!("{:x?}", vm_context);
+    // We do not want to delete globals in this case as it messes up recompilation
+    vm_lifter.optimize_module_no_global_delete();
 
-    let handlers = vm_context.disassemble_context(&pe_file, &pe_bytes);
-    let last_handler = *handlers.last().unwrap();
 
-    vm_lifter.lift_helper_stub(&vm_context, &handlers);
+    for address in command_line_args.vm_call_addresses.iter().cloned() {
+        // Fix the argument names since a stripping pass is included
+        vm_lifter.fix_arg_names(&format!("helperfunction_{:x}", address));
 
+        // Print the function to stderr
+        vm_lifter.print_function(&format!("helperfunction_{:x}", address));
+    }
+
+
+    // Output the module to an ir file devirt.ll
+    vm_lifter.output_module();
+
+    Ok(())
+}
+
+fn explore_cfg_and_lift_function(pe_file: &PeFile, pe_bytes: &[u8], vm_call_address: u64, vm_lifter: &VmLifter, max_blocks: Option<u64>) -> Result<(), Box<dyn Error>> {
+
+    // Cfg exploration
     let mut explored = HashMap::new();
     let mut worklist = VecDeque::new();
     let mut reprove_list = VecDeque::new();
 
+    let mut control_flow_graph = GraphMap::<u64, (), petgraph::Directed>::new();
+
+
+    // `VmContext` for the first block
+    let mut vm_context =
+        VmContext::new_from_vm_entry(pe_file, pe_bytes, vm_call_address);
+
     let root_vip = vm_context.initial_vip;
+
+    // Disassemble the handlers
+    let handlers = vm_context.disassemble_context(pe_file, pe_bytes);
+    // Get the last handler
+    let last_handler = *handlers.last().unwrap();
+
+    // Lift this first block into a stub
+    vm_lifter.lift_helper_stub(&vm_context, &handlers);
+
+    // Add the first block to the cfg
     control_flow_graph.add_node(root_vip);
 
+    // Handle special case of the first block ending in nop
     if last_handler.1 == HandlerVmInstruction::Nop {
+
         worklist.push_back((vm_context.clone(), last_handler, vm_context.vip_value));
         explored.insert(root_vip, (vm_context, last_handler));
+    
     } else if last_handler.1 != HandlerVmInstruction::VmExit {
         let next_vips = vm_lifter.slice_vip(&control_flow_graph,
                                             vm_context.initial_vip,
                                             root_vip,
-                                            command_line_args.max_blocks)?;
+                                            max_blocks)?;
 
         for target_vip in next_vips {
             worklist.push_back((vm_context.clone(), last_handler, target_vip));
@@ -143,11 +179,18 @@ fn main() -> Result<(), Box<dyn Error>> {
             // target contains the destination of the edge from current_block_vip
             for (_, target, _) in outgoing_edges {
                 // Ok get all the blocks the current_block_vip block could branch to
-                let (vm_context, last_handler) = explored.get(&target).unwrap();
-                // Add them to the reprove list
-                reprove_list.push_back((vm_context.clone(), *last_handler, target));
+                let target_block = explored.get(&target);
+                
+                match target_block {
+                    Some(entry) => {let (vm_context, last_handler) = entry;
+                    // Add them to the reprove list
+                     reprove_list.push_back((vm_context.clone(), *last_handler, target));
                 // We remove them from explored
-                explored.remove(&target);
+                   explored.remove(&target);},
+                None => {
+                        // Still in the worklist and not yet explored nothing to do
+                    },
+            }
             }
         }
 
@@ -181,13 +224,13 @@ fn main() -> Result<(), Box<dyn Error>> {
             current_block_vm_context =
                 prev_block_vm_context.new_from_jump_handler(&last_prev_block_handler,
                                                             current_block_vip,
-                                                            &pe_file,
-                                                            &pe_bytes);
+                                                            pe_file,
+                                                            pe_bytes);
         }
 
         // Get the new handler of the current_block_vip block
         let current_block_handlers =
-            current_block_vm_context.disassemble_context(&pe_file, &pe_bytes);
+            current_block_vm_context.disassemble_context(pe_file, pe_bytes);
 
         // If this panics shit is fucked anyways
         let last_current_block_handler = *current_block_handlers.last().unwrap();
@@ -212,7 +255,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         let next_vips = vm_lifter.slice_vip(&control_flow_graph,
                                             current_block_vm_context.initial_vip,
                                             root_vip,
-                                            command_line_args.max_blocks)?;
+                                            max_blocks)?;
         for next_vip in next_vips {
             worklist.push_back((current_block_vm_context.clone(),
                                 last_current_block_handler,
@@ -221,31 +264,19 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     }
 
-    // Write out the control flow graph to a dot file
-    let mut dot_file = std::fs::File::create("cfg.dot")?;
-    writeln!(dot_file,
-             "{:?}",
-             petgraph::dot::Dot::with_attr_getters(&control_flow_graph,
-                                                   &[Config::EdgeNoLabel, Config::NodeNoLabel],
-                                                   &|_, _| { "".to_owned() },
-                                                   &|_, node_ref| {
-                                                       format!("label = \"{:#x}\"",
-                                                               node_ref.weight())
-                                                   }))?;
+    // // Write out the control flow graph to a dot file
+    // let mut dot_file = std::fs::File::create("cfg.dot")?;
+    // writeln!(dot_file,
+    //          "{:?}",
+    //          petgraph::dot::Dot::with_attr_getters(&control_flow_graph,
+    //                                                &[Config::EdgeNoLabel, Config::NodeNoLabel],
+    //                                                &|_, _| { "".to_owned() },
+    //                                                &|_, node_ref| {
+    //                                                    format!("label = \"{:#x}\"",
+    //                                                            node_ref.weight())
+    //                                                }))?;
 
     // Create the final lifted function
-    vm_lifter.create_helper_function(&control_flow_graph, root_vip);
-
-    // We do not want to delete globals in this case as it messes up recompilation
-    vm_lifter.optimize_module_no_global_delete();
-
-    // Fix the argument names since a stripping pass is included
-    vm_lifter.fix_arg_names(&format!("helperfunction_{:x}", root_vip));
-
-    // Print the function to stderr
-    vm_lifter.print_function(&format!("helperfunction_{:x}", root_vip));
-
-    // Output the module to an ir file devirt.ll
-    vm_lifter.output_module();
+    let helper_function = vm_lifter.create_helper_function(&control_flow_graph, root_vip, vm_call_address);
     Ok(())
 }

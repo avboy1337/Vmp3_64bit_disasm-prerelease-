@@ -8,7 +8,7 @@ use inkwell::{
     passes::PassManager,
     values::{
         BasicValue, BasicValueEnum, CallableValue, FunctionValue, InstructionValue, PointerValue,
-    },
+    }, InlineAsmDialect,
 };
 use petgraph::{algo::dominators, graphmap::GraphMap, EdgeDirection::Incoming};
 use std::{
@@ -23,11 +23,19 @@ use crate::{
     vm_handler::{Registers, VmContext},
     vm_matchers::HandlerVmInstruction,
 };
+
+
+
 pub struct VmLifter<'ctx> {
     context: &'ctx Context,
     module:  RefCell<Module<'ctx>>,
     builder: Builder<'ctx>,
 }
+
+
+
+
+
 // This leaks memory :(
 impl<'ctx> VmLifter<'ctx> {
     pub fn lift_helper_stub(&self,
@@ -388,6 +396,12 @@ impl<'ctx> VmLifter<'ctx> {
             HandlerVmInstruction::PushCr0 => {
                 self.lift_generic_handler_unsized("PUSH_CR0", helper_stub);
             },
+            HandlerVmInstruction::PushCr3 => {
+                self.lift_generic_handler_unsized("PUSH_CR3", helper_stub);
+            },
+            HandlerVmInstruction::Rdtsc => {
+                self.lift_generic_handler_unsized("RDTSC", helper_stub);
+            },
             HandlerVmInstruction::Nop => {
                 // Yep nothing
             },
@@ -686,6 +700,9 @@ impl<'ctx> VmLifter<'ctx> {
                     stub_function: &FunctionValue) {
         let vsp = get_param_vsp(stub_function);
         let vip = get_param_vip(stub_function);
+        
+        let rsp_ptr = get_param_from_reg(&Registers::Rsp, stub_function);
+        self.builder.build_store(rsp_ptr, vsp);
 
         for reg in vm_context.push_order.iter().rev() {
             let sem_push_reg64 = self.get_semantic("SEM_POP_REG_64");
@@ -755,7 +772,12 @@ impl<'ctx> VmLifter<'ctx> {
 
     pub fn create_helper_function(&self,
                                   control_flow_graph: &GraphMap<u64, (), petgraph::Directed>,
-                                  start_vip: u64) {
+                                  start_vip: u64,
+                                  vm_call_address: u64) -> FunctionValue {
+
+
+
+
         let helper_function_def = self.module
                                       .borrow()
                                       .get_function("HelperFunction")
@@ -777,7 +799,7 @@ impl<'ctx> VmLifter<'ctx> {
 
         let helper_function = self.module
                                   .borrow()
-                                  .add_function(&format!("helperfunction_{:x}", start_vip),
+                                  .add_function(&format!("helperfunction_{:x}", vm_call_address),
                                                 helper_function_type,
                                                 None);
         let param_names = ["rax", "rbx", "rcx", "rdx", "rsi", "rdi", "rbp", "rsp", "r8", "r9",
@@ -887,6 +909,7 @@ impl<'ctx> VmLifter<'ctx> {
         }
 
         assert!(helper_function.verify(true));
+        helper_function
     }
 
     fn lift_bb_stub(&self,
@@ -1011,6 +1034,7 @@ impl<'ctx> VmLifter<'ctx> {
             },
         }
     }
+    
 
     pub fn create_helper_slicevpc(&self,
                                   vips: &[u64]) {
@@ -1129,6 +1153,7 @@ impl<'ctx> VmLifter<'ctx> {
 
         let mut call = None;
         for stub_vip in vips.iter().rev() {
+            // println!("Getting stub -> {:#x}", stub_vip);
             let helper_stub = self.module
                                   .borrow()
                                   .get_function(&format!("helperstub_{:x}", stub_vip))

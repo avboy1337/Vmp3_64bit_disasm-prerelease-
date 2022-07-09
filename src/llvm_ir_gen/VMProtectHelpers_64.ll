@@ -183,6 +183,7 @@ $_Z4SHRDItEvRm = comdat any
 $_Z4SHRDIhEvRm = comdat any
 
 @SEM_PUSH_CR0 = dso_local constant void (i64*)* @_Z8PUSH_CR0Rm, align 8
+@SEM_PUSH_CR3 = dso_local constant void (i64*)* @_Z8PUSH_CR3Rm, align 8
 @SEM_PUSH_IMM_64 = dso_local constant void (i64*, i64)* @_Z8PUSH_IMMImEvRmT_, align 8
 @SEM_PUSH_IMM_32 = dso_local constant void (i64*, i32)* @_Z8PUSH_IMMIjEvRmT_, align 8
 @SEM_PUSH_IMM_16 = dso_local constant void (i64*, i16)* @_Z8PUSH_IMMItEvRmT_, align 8
@@ -301,7 +302,7 @@ $_Z4SHRDIhEvRm = comdat any
 @GS = external dso_local local_unnamed_addr global [0 x i8], align 1
 @FS = external dso_local local_unnamed_addr global [0 x i8], align 1
 @__undef = external dso_local local_unnamed_addr global i64, align 8
-@llvm.compiler.used = appending global [115 x i8*] [i8* bitcast (void (i64*)** @SEM_ADD_16 to i8*), i8* bitcast (void (i64*)** @SEM_ADD_32 to i8*), i8* bitcast (void (i64*)** @SEM_ADD_64 to i8*), i8* bitcast (void (i64*)** @SEM_ADD_8 to i8*), i8* bitcast (void (i64*)** @SEM_CPUID to i8*), i8* bitcast (void (i64*)** @SEM_DIV_16 to i8*), i8* bitcast (void (i64*)** @SEM_DIV_32 to i8*), i8* bitcast (void (i64*)** @SEM_DIV_64 to i8*), i8* bitcast (void (i64*)** @SEM_DIV_8 to i8*), i8* bitcast (void (i64*, i64*)** @SEM_EXIT to i8*), i8* bitcast (void (i64*)** @SEM_IDIV_16 to i8*), i8* bitcast (void (i64*)** @SEM_IDIV_32 to i8*), i8* bitcast (void (i64*)** @SEM_IDIV_64 to i8*), i8* bitcast (void (i64*)** @SEM_IDIV_8 to i8*), i8* bitcast (void (i64*)** @SEM_IMUL_16 to i8*), i8* bitcast (void (i64*)** @SEM_IMUL_32 to i8*), i8* bitcast (void (i64*)** @SEM_IMUL_64 to i8*), i8* bitcast (void (i64*)** @SEM_IMUL_8 to i8*), i8* bitcast (void (i64*, i64*)** @SEM_JUMP to i8*), i8* bitcast (void (i64*, i64*)** @SEM_JUMP_DEC to i8*), i8* bitcast (void (i64*, i64*)** @SEM_JUMP_INC to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_DS_16 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_DS_32 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_DS_64 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_DS_8 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_FS_16 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_FS_32 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_FS_64 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_FS_8 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_GS_16 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_GS_32 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_GS_64 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_GS_8 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_SS_16 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_SS_32 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_SS_64 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_SS_8 to i8*), i8* bitcast (void (%struct.VirtualRegister*, i64*)** @SEM_MOVE_VMREG_SLOT to i8*), i8* bitcast (void (i64*)** @SEM_MUL_16 to i8*), i8* bitcast (void (i64*)** @SEM_MUL_32 to i8*), i8* bitcast (void (i64*)** @SEM_MUL_64 to i8*), i8* bitcast (void (i64*)** @SEM_MUL_8 to i8*), i8* bitcast (void (i64*)** @SEM_NAND_16 to i8*), i8* bitcast (void (i64*)** @SEM_NAND_32 to i8*), i8* bitcast (void (i64*)** @SEM_NAND_64 to i8*), i8* bitcast (void (i64*)** @SEM_NAND_8 to i8*), i8* bitcast (void (i64*)** @SEM_NOR_16 to i8*), i8* bitcast (void (i64*)** @SEM_NOR_32 to i8*), i8* bitcast (void (i64*)** @SEM_NOR_64 to i8*), i8* bitcast (void (i64*)** @SEM_NOR_8 to i8*), i8* bitcast (void (i64*, i64*)** @SEM_POP_FLAGS to i8*), i8* bitcast (void (i64*, i64*)** @SEM_POP_REG_64 to i8*), i8* bitcast (void (i64*, i64*)** @SEM_POP_SLOT to i8*), i8* bitcast (void (i64*, %struct.VirtualRegister*)** @SEM_POP_VMREG_16_HIGHHIGH to i8*), i8* bitcast (void (i64*, %struct.VirtualRegister*)** @SEM_POP_VMREG_16_HIGHLOW to i8*), i8* bitcast (void (i64*, %struct.VirtualRegister*)** @SEM_POP_VMREG_16_LOWHIGH to i8*), i8* bitcast (void (i64*, %struct.VirtualRegister*)** @SEM_POP_VMREG_16_LOWLOW to i8*), i8* bitcast (void (i64*, %struct.VirtualRegister*)** @SEM_POP_VMREG_32_HIGH to i8*), i8* bitcast (void (i64*, %struct.VirtualRegister*)** @SEM_POP_VMREG_32_LOW to i8*), i8* bitcast (void (i64*, %struct.VirtualRegister*)** @SEM_POP_VMREG_64 to i8*), i8* bitcast (void (i64*, %struct.VirtualRegister*)** @SEM_POP_VMREG_8_HIGH to i8*), i8* bitcast (void (i64*, %struct.VirtualRegister*)** @SEM_POP_VMREG_8_LOW to i8*), i8* bitcast (void (i64*)** @SEM_POP_VOID_64 to i8*), i8* bitcast (void (i64*)** @SEM_POP_VSP_16 to i8*), i8* bitcast (void (i64*)** @SEM_POP_VSP_32 to i8*), i8* bitcast (void (i64*)** @SEM_POP_VSP_64 to i8*), i8* bitcast (void (i64*)** @SEM_PUSH_CR0 to i8*), i8* bitcast (void (i64*, i16)** @SEM_PUSH_IMM_16 to i8*), i8* bitcast (void (i64*, i32)** @SEM_PUSH_IMM_32 to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_IMM_64 to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_REG_64 to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_VMREG_16_HIGHHIGH to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_VMREG_16_HIGHLOW to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_VMREG_16_LOWHIGH to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_VMREG_16_LOWLOW to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_VMREG_32_HIGH to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_VMREG_32_LOW to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_VMREG_64 to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_VMREG_8_HIGH to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_VMREG_8_LOW to i8*), i8* bitcast (void (i64*)** @SEM_PUSH_VSP_16 to i8*), i8* bitcast (void (i64*)** @SEM_PUSH_VSP_32 to i8*), i8* bitcast (void (i64*)** @SEM_PUSH_VSP_64 to i8*), i8* bitcast (void (i64*)** @SEM_RDTSC to i8*), i8* bitcast (void (i64*)** @SEM_SHLD_16 to i8*), i8* bitcast (void (i64*)** @SEM_SHLD_32 to i8*), i8* bitcast (void (i64*)** @SEM_SHLD_64 to i8*), i8* bitcast (void (i64*)** @SEM_SHLD_8 to i8*), i8* bitcast (void (i64*)** @SEM_SHL_16 to i8*), i8* bitcast (void (i64*)** @SEM_SHL_32 to i8*), i8* bitcast (void (i64*)** @SEM_SHL_64 to i8*), i8* bitcast (void (i64*)** @SEM_SHL_8 to i8*), i8* bitcast (void (i64*)** @SEM_SHRD_16 to i8*), i8* bitcast (void (i64*)** @SEM_SHRD_32 to i8*), i8* bitcast (void (i64*)** @SEM_SHRD_64 to i8*), i8* bitcast (void (i64*)** @SEM_SHRD_8 to i8*), i8* bitcast (void (i64*)** @SEM_SHR_16 to i8*), i8* bitcast (void (i64*)** @SEM_SHR_32 to i8*), i8* bitcast (void (i64*)** @SEM_SHR_64 to i8*), i8* bitcast (void (i64*)** @SEM_SHR_8 to i8*), i8* bitcast (void (i64*)** @SEM_STORE_DS_16 to i8*), i8* bitcast (void (i64*)** @SEM_STORE_DS_32 to i8*), i8* bitcast (void (i64*)** @SEM_STORE_DS_64 to i8*), i8* bitcast (void (i64*)** @SEM_STORE_DS_8 to i8*), i8* bitcast (void (i64*)** @SEM_STORE_SS_16 to i8*), i8* bitcast (void (i64*)** @SEM_STORE_SS_32 to i8*), i8* bitcast (void (i64*)** @SEM_STORE_SS_64 to i8*), i8* bitcast (void (i64*)** @SEM_STORE_SS_8 to i8*), i8* bitcast (void (%struct.VirtualRegister*, i64*)** @SEM_UNDEF_MOVE_VMREG_SLOT to i8*), i8* bitcast (void (i64*, i64*)** @SEM_UNDEF_POP_REG_32 to i8*), i8* bitcast (void (i64*, i64*)** @SEM_UNDEF_POP_SLOT to i8*), i8* bitcast (void (i64*, %struct.VirtualRegister*)** @SEM_UNDEF_POP_VMREG_32 to i8*), i8* bitcast (void (i64*)** @SEM_UNDEF_POP_VOID_32 to i8*), i8* bitcast (void (i64*, i64)** @SEM_UNDEF_PUSH_REG_32 to i8*), i8* bitcast (void (i64*, i64)** @SEM_UNDEF_PUSH_VMREG_32 to i8*)], section "llvm.metadata"
+@llvm.compiler.used = appending global [116 x i8*] [i8* bitcast (void (i64*)** @SEM_ADD_16 to i8*), i8* bitcast (void (i64*)** @SEM_ADD_32 to i8*), i8* bitcast (void (i64*)** @SEM_ADD_64 to i8*), i8* bitcast (void (i64*)** @SEM_ADD_8 to i8*), i8* bitcast (void (i64*)** @SEM_CPUID to i8*), i8* bitcast (void (i64*)** @SEM_DIV_16 to i8*), i8* bitcast (void (i64*)** @SEM_DIV_32 to i8*), i8* bitcast (void (i64*)** @SEM_DIV_64 to i8*), i8* bitcast (void (i64*)** @SEM_DIV_8 to i8*), i8* bitcast (void (i64*, i64*)** @SEM_EXIT to i8*), i8* bitcast (void (i64*)** @SEM_IDIV_16 to i8*), i8* bitcast (void (i64*)** @SEM_IDIV_32 to i8*), i8* bitcast (void (i64*)** @SEM_IDIV_64 to i8*), i8* bitcast (void (i64*)** @SEM_IDIV_8 to i8*), i8* bitcast (void (i64*)** @SEM_IMUL_16 to i8*), i8* bitcast (void (i64*)** @SEM_IMUL_32 to i8*), i8* bitcast (void (i64*)** @SEM_IMUL_64 to i8*), i8* bitcast (void (i64*)** @SEM_IMUL_8 to i8*), i8* bitcast (void (i64*, i64*)** @SEM_JUMP to i8*), i8* bitcast (void (i64*, i64*)** @SEM_JUMP_DEC to i8*), i8* bitcast (void (i64*, i64*)** @SEM_JUMP_INC to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_DS_16 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_DS_32 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_DS_64 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_DS_8 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_FS_16 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_FS_32 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_FS_64 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_FS_8 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_GS_16 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_GS_32 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_GS_64 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_GS_8 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_SS_16 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_SS_32 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_SS_64 to i8*), i8* bitcast (void (i64*)** @SEM_LOAD_SS_8 to i8*), i8* bitcast (void (%struct.VirtualRegister*, i64*)** @SEM_MOVE_VMREG_SLOT to i8*), i8* bitcast (void (i64*)** @SEM_MUL_16 to i8*), i8* bitcast (void (i64*)** @SEM_MUL_32 to i8*), i8* bitcast (void (i64*)** @SEM_MUL_64 to i8*), i8* bitcast (void (i64*)** @SEM_MUL_8 to i8*), i8* bitcast (void (i64*)** @SEM_NAND_16 to i8*), i8* bitcast (void (i64*)** @SEM_NAND_32 to i8*), i8* bitcast (void (i64*)** @SEM_NAND_64 to i8*), i8* bitcast (void (i64*)** @SEM_NAND_8 to i8*), i8* bitcast (void (i64*)** @SEM_NOR_16 to i8*), i8* bitcast (void (i64*)** @SEM_NOR_32 to i8*), i8* bitcast (void (i64*)** @SEM_NOR_64 to i8*), i8* bitcast (void (i64*)** @SEM_NOR_8 to i8*), i8* bitcast (void (i64*, i64*)** @SEM_POP_FLAGS to i8*), i8* bitcast (void (i64*, i64*)** @SEM_POP_REG_64 to i8*), i8* bitcast (void (i64*, i64*)** @SEM_POP_SLOT to i8*), i8* bitcast (void (i64*, %struct.VirtualRegister*)** @SEM_POP_VMREG_16_HIGHHIGH to i8*), i8* bitcast (void (i64*, %struct.VirtualRegister*)** @SEM_POP_VMREG_16_HIGHLOW to i8*), i8* bitcast (void (i64*, %struct.VirtualRegister*)** @SEM_POP_VMREG_16_LOWHIGH to i8*), i8* bitcast (void (i64*, %struct.VirtualRegister*)** @SEM_POP_VMREG_16_LOWLOW to i8*), i8* bitcast (void (i64*, %struct.VirtualRegister*)** @SEM_POP_VMREG_32_HIGH to i8*), i8* bitcast (void (i64*, %struct.VirtualRegister*)** @SEM_POP_VMREG_32_LOW to i8*), i8* bitcast (void (i64*, %struct.VirtualRegister*)** @SEM_POP_VMREG_64 to i8*), i8* bitcast (void (i64*, %struct.VirtualRegister*)** @SEM_POP_VMREG_8_HIGH to i8*), i8* bitcast (void (i64*, %struct.VirtualRegister*)** @SEM_POP_VMREG_8_LOW to i8*), i8* bitcast (void (i64*)** @SEM_POP_VOID_64 to i8*), i8* bitcast (void (i64*)** @SEM_POP_VSP_16 to i8*), i8* bitcast (void (i64*)** @SEM_POP_VSP_32 to i8*), i8* bitcast (void (i64*)** @SEM_POP_VSP_64 to i8*), i8* bitcast (void (i64*)** @SEM_PUSH_CR0 to i8*), i8* bitcast (void (i64*)** @SEM_PUSH_CR3 to i8*), i8* bitcast (void (i64*, i16)** @SEM_PUSH_IMM_16 to i8*), i8* bitcast (void (i64*, i32)** @SEM_PUSH_IMM_32 to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_IMM_64 to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_REG_64 to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_VMREG_16_HIGHHIGH to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_VMREG_16_HIGHLOW to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_VMREG_16_LOWHIGH to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_VMREG_16_LOWLOW to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_VMREG_32_HIGH to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_VMREG_32_LOW to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_VMREG_64 to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_VMREG_8_HIGH to i8*), i8* bitcast (void (i64*, i64)** @SEM_PUSH_VMREG_8_LOW to i8*), i8* bitcast (void (i64*)** @SEM_PUSH_VSP_16 to i8*), i8* bitcast (void (i64*)** @SEM_PUSH_VSP_32 to i8*), i8* bitcast (void (i64*)** @SEM_PUSH_VSP_64 to i8*), i8* bitcast (void (i64*)** @SEM_RDTSC to i8*), i8* bitcast (void (i64*)** @SEM_SHLD_16 to i8*), i8* bitcast (void (i64*)** @SEM_SHLD_32 to i8*), i8* bitcast (void (i64*)** @SEM_SHLD_64 to i8*), i8* bitcast (void (i64*)** @SEM_SHLD_8 to i8*), i8* bitcast (void (i64*)** @SEM_SHL_16 to i8*), i8* bitcast (void (i64*)** @SEM_SHL_32 to i8*), i8* bitcast (void (i64*)** @SEM_SHL_64 to i8*), i8* bitcast (void (i64*)** @SEM_SHL_8 to i8*), i8* bitcast (void (i64*)** @SEM_SHRD_16 to i8*), i8* bitcast (void (i64*)** @SEM_SHRD_32 to i8*), i8* bitcast (void (i64*)** @SEM_SHRD_64 to i8*), i8* bitcast (void (i64*)** @SEM_SHRD_8 to i8*), i8* bitcast (void (i64*)** @SEM_SHR_16 to i8*), i8* bitcast (void (i64*)** @SEM_SHR_32 to i8*), i8* bitcast (void (i64*)** @SEM_SHR_64 to i8*), i8* bitcast (void (i64*)** @SEM_SHR_8 to i8*), i8* bitcast (void (i64*)** @SEM_STORE_DS_16 to i8*), i8* bitcast (void (i64*)** @SEM_STORE_DS_32 to i8*), i8* bitcast (void (i64*)** @SEM_STORE_DS_64 to i8*), i8* bitcast (void (i64*)** @SEM_STORE_DS_8 to i8*), i8* bitcast (void (i64*)** @SEM_STORE_SS_16 to i8*), i8* bitcast (void (i64*)** @SEM_STORE_SS_32 to i8*), i8* bitcast (void (i64*)** @SEM_STORE_SS_64 to i8*), i8* bitcast (void (i64*)** @SEM_STORE_SS_8 to i8*), i8* bitcast (void (%struct.VirtualRegister*, i64*)** @SEM_UNDEF_MOVE_VMREG_SLOT to i8*), i8* bitcast (void (i64*, i64*)** @SEM_UNDEF_POP_REG_32 to i8*), i8* bitcast (void (i64*, i64*)** @SEM_UNDEF_POP_SLOT to i8*), i8* bitcast (void (i64*, %struct.VirtualRegister*)** @SEM_UNDEF_POP_VMREG_32 to i8*), i8* bitcast (void (i64*)** @SEM_UNDEF_POP_VOID_32 to i8*), i8* bitcast (void (i64*, i64)** @SEM_UNDEF_PUSH_REG_32 to i8*), i8* bitcast (void (i64*, i64)** @SEM_UNDEF_PUSH_VMREG_32 to i8*)], section "llvm.metadata"
 
 ; Function Attrs: alwaysinline mustprogress nounwind uwtable
 define dso_local void @_Z8PUSH_CR0Rm(i64* nocapture nonnull align 8 dereferenceable(8) %vsp) #0 {
@@ -321,6 +322,19 @@ declare void @llvm.lifetime.start.p0i8(i64 immarg, i8* nocapture) #1
 
 ; Function Attrs: argmemonly mustprogress nofree nosync nounwind willreturn
 declare void @llvm.lifetime.end.p0i8(i64 immarg, i8* nocapture) #1
+
+; Function Attrs: alwaysinline mustprogress nounwind uwtable
+define dso_local void @_Z8PUSH_CR3Rm(i64* nocapture nonnull align 8 dereferenceable(8) %vsp) #0 {
+entry:
+  %0 = tail call i64 asm "mov %cr3, $0", "=r,~{dirflag},~{fpsr},~{flags}"() #11, !srcloc !8
+  %1 = load i64, i64* %vsp, align 8, !tbaa !4
+  %sub.i = add i64 %1, -8
+  store i64 %sub.i, i64* %vsp, align 8, !tbaa !4
+  %arrayidx.i = getelementptr inbounds [0 x i8], [0 x i8]* @RAM, i64 0, i64 %sub.i
+  %value.addr.0.arrayidx.sroa_cast.i = bitcast i8* %arrayidx.i to i64*
+  store i64 %0, i64* %value.addr.0.arrayidx.sroa_cast.i, align 1
+  ret void
+}
 
 ; Function Attrs: alwaysinline mustprogress nounwind uwtable
 define linkonce_odr dso_local void @_Z8PUSH_IMMImEvRmT_(i64* nonnull align 8 dereferenceable(8) %vsp, i64 %value) #0 comdat {
@@ -975,7 +989,7 @@ entry:
   %byte.0.copyload = load i16, i16* %byte.0.arrayidx.sroa_cast, align 1
   %conv.i = trunc i16 %byte.0.copyload to i8
   %b0 = bitcast %struct.VirtualRegister* %vmreg to i8*
-  store i8 %conv.i, i8* %b0, align 1, !tbaa !8
+  store i8 %conv.i, i8* %b0, align 1, !tbaa !9
   %1 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i8 = trunc i64 %1 to i16
   %2 = load i64, i64* %vsp, align 8, !tbaa !4
@@ -998,7 +1012,7 @@ entry:
   %conv.i = trunc i16 %byte.0.copyload to i8
   %byte1 = bitcast %struct.VirtualRegister* %vmreg to %struct.anon*
   %b1 = getelementptr inbounds %struct.anon, %struct.anon* %byte1, i64 0, i32 1
-  store i8 %conv.i, i8* %b1, align 1, !tbaa !8
+  store i8 %conv.i, i8* %b1, align 1, !tbaa !9
   %1 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i8 = trunc i64 %1 to i16
   %2 = load i64, i64* %vsp, align 8, !tbaa !4
@@ -1019,11 +1033,11 @@ entry:
   %value.0.arrayidx.sroa_cast = bitcast i8* %arrayidx to i16*
   %value.0.copyload = load i16, i16* %value.0.arrayidx.sroa_cast, align 1
   %qword = getelementptr inbounds %struct.VirtualRegister, %struct.VirtualRegister* %vmreg, i64 0, i32 0, i32 0
-  %1 = load i64, i64* %qword, align 1, !tbaa !8
+  %1 = load i64, i64* %qword, align 1, !tbaa !9
   %and = and i64 %1, -65536
   %conv = zext i16 %value.0.copyload to i64
   %or = or i64 %and, %conv
-  store i64 %or, i64* %qword, align 1, !tbaa !8
+  store i64 %or, i64* %qword, align 1, !tbaa !9
   %2 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i = trunc i64 %2 to i16
   %3 = load i64, i64* %vsp, align 8, !tbaa !4
@@ -1044,12 +1058,12 @@ entry:
   %value.0.arrayidx.sroa_cast = bitcast i8* %arrayidx to i16*
   %value.0.copyload = load i16, i16* %value.0.arrayidx.sroa_cast, align 1
   %qword = getelementptr inbounds %struct.VirtualRegister, %struct.VirtualRegister* %vmreg, i64 0, i32 0, i32 0
-  %1 = load i64, i64* %qword, align 1, !tbaa !8
+  %1 = load i64, i64* %qword, align 1, !tbaa !9
   %and = and i64 %1, -4294901761
   %conv.i = zext i16 %value.0.copyload to i64
   %shl.i = shl nuw nsw i64 %conv.i, 16
   %or = or i64 %and, %shl.i
-  store i64 %or, i64* %qword, align 1, !tbaa !8
+  store i64 %or, i64* %qword, align 1, !tbaa !9
   %2 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i10 = trunc i64 %2 to i16
   %3 = load i64, i64* %vsp, align 8, !tbaa !4
@@ -1070,12 +1084,12 @@ entry:
   %value.0.arrayidx.sroa_cast = bitcast i8* %arrayidx to i16*
   %value.0.copyload = load i16, i16* %value.0.arrayidx.sroa_cast, align 1
   %qword = getelementptr inbounds %struct.VirtualRegister, %struct.VirtualRegister* %vmreg, i64 0, i32 0, i32 0
-  %1 = load i64, i64* %qword, align 1, !tbaa !8
+  %1 = load i64, i64* %qword, align 1, !tbaa !9
   %and = and i64 %1, -281470681743361
   %conv.i = zext i16 %value.0.copyload to i64
   %shl.i = shl nuw nsw i64 %conv.i, 32
   %or = or i64 %and, %shl.i
-  store i64 %or, i64* %qword, align 1, !tbaa !8
+  store i64 %or, i64* %qword, align 1, !tbaa !9
   %2 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i10 = trunc i64 %2 to i16
   %3 = load i64, i64* %vsp, align 8, !tbaa !4
@@ -1096,12 +1110,12 @@ entry:
   %value.0.arrayidx.sroa_cast = bitcast i8* %arrayidx to i16*
   %value.0.copyload = load i16, i16* %value.0.arrayidx.sroa_cast, align 1
   %qword = getelementptr inbounds %struct.VirtualRegister, %struct.VirtualRegister* %vmreg, i64 0, i32 0, i32 0
-  %1 = load i64, i64* %qword, align 1, !tbaa !8
+  %1 = load i64, i64* %qword, align 1, !tbaa !9
   %and = and i64 %1, 281474976710655
   %conv.i = zext i16 %value.0.copyload to i64
   %shl.i = shl nuw i64 %conv.i, 48
   %or = or i64 %and, %shl.i
-  store i64 %or, i64* %qword, align 1, !tbaa !8
+  store i64 %or, i64* %qword, align 1, !tbaa !9
   %2 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i10 = trunc i64 %2 to i16
   %3 = load i64, i64* %vsp, align 8, !tbaa !4
@@ -1122,11 +1136,11 @@ entry:
   %value.0.arrayidx.sroa_cast = bitcast i8* %arrayidx to i32*
   %value.0.copyload = load i32, i32* %value.0.arrayidx.sroa_cast, align 1
   %qword = getelementptr inbounds %struct.VirtualRegister, %struct.VirtualRegister* %vmreg, i64 0, i32 0, i32 0
-  %1 = load i64, i64* %qword, align 1, !tbaa !8
+  %1 = load i64, i64* %qword, align 1, !tbaa !9
   %and = and i64 %1, -4294967296
   %conv = zext i32 %value.0.copyload to i64
   %or = or i64 %and, %conv
-  store i64 %or, i64* %qword, align 1, !tbaa !8
+  store i64 %or, i64* %qword, align 1, !tbaa !9
   %2 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i = trunc i64 %2 to i32
   %3 = load i64, i64* %vsp, align 8, !tbaa !4
@@ -1147,12 +1161,12 @@ entry:
   %value.0.arrayidx.sroa_cast = bitcast i8* %arrayidx to i32*
   %value.0.copyload = load i32, i32* %value.0.arrayidx.sroa_cast, align 1
   %qword = getelementptr inbounds %struct.VirtualRegister, %struct.VirtualRegister* %vmreg, i64 0, i32 0, i32 0
-  %1 = load i64, i64* %qword, align 1, !tbaa !8
+  %1 = load i64, i64* %qword, align 1, !tbaa !9
   %and = and i64 %1, 4294967295
   %conv.i = zext i32 %value.0.copyload to i64
   %shl.i = shl nuw i64 %conv.i, 32
   %or = or i64 %and, %shl.i
-  store i64 %or, i64* %qword, align 1, !tbaa !8
+  store i64 %or, i64* %qword, align 1, !tbaa !9
   %2 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i10 = trunc i64 %2 to i32
   %3 = load i64, i64* %vsp, align 8, !tbaa !4
@@ -1173,7 +1187,7 @@ entry:
   %value.0.arrayidx.sroa_cast = bitcast i8* %arrayidx to i64*
   %value.0.copyload = load i64, i64* %value.0.arrayidx.sroa_cast, align 1
   %qword = getelementptr inbounds %struct.VirtualRegister, %struct.VirtualRegister* %vmreg, i64 0, i32 0, i32 0
-  store i64 %value.0.copyload, i64* %qword, align 1, !tbaa !8
+  store i64 %value.0.copyload, i64* %qword, align 1, !tbaa !9
   %1 = load i64, i64* @__undef, align 8, !tbaa !4
   %2 = load i64, i64* %vsp, align 8, !tbaa !4
   %arrayidx1 = getelementptr inbounds [0 x i8], [0 x i8]* @RAM, i64 0, i64 %2
@@ -1232,7 +1246,7 @@ define dso_local void @_Z15MOVE_VMREG_SLOTR15VirtualRegisterRm(%struct.VirtualRe
 entry:
   %0 = load i64, i64* %slot, align 8, !tbaa !4
   %qword = getelementptr inbounds %struct.VirtualRegister, %struct.VirtualRegister* %vmreg, i64 0, i32 0, i32 0
-  store i64 %0, i64* %qword, align 1, !tbaa !8
+  store i64 %0, i64* %qword, align 1, !tbaa !9
   ret void
 }
 
@@ -1263,7 +1277,7 @@ entry:
   %conv.i.i = trunc i64 %1 to i32
   store i32 %conv.i.i, i32* %value.0.arrayidx.sroa_cast.i, align 1
   %2 = load i64, i64* %vsp, align 8, !tbaa !4
-  %3 = tail call { i32, i32, i32, i32 } asm "  xchgq  %rbx,${1:q}\0A  cpuid\0A  xchgq  %rbx,${1:q}", "={ax},=r,={cx},={dx},0,~{dirflag},~{fpsr},~{flags}"(i32 %value.0.copyload.i) #11, !srcloc !9
+  %3 = tail call { i32, i32, i32, i32 } asm "  xchgq  %rbx,${1:q}\0A  cpuid\0A  xchgq  %rbx,${1:q}", "={ax},=r,={cx},={dx},0,~{dirflag},~{fpsr},~{flags}"(i32 %value.0.copyload.i) #11, !srcloc !10
   %asmresult = extractvalue { i32, i32, i32, i32 } %3, 0
   %asmresult1 = extractvalue { i32, i32, i32, i32 } %3, 1
   %asmresult2 = extractvalue { i32, i32, i32, i32 } %3, 2
@@ -1360,7 +1374,7 @@ entry:
   %cmp1.i.i.i = icmp ult i64 %add.i32, %value.0.copyload.i30
   %5 = or i1 %cmp.i.i.i, %cmp1.i.i.i
   %conv.i.i.i = trunc i64 %add.i32 to i8
-  %6 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i.i) #3, !range !10
+  %6 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i.i) #3, !range !11
   %xor.i.i.i = xor i64 %value.0.copyload.i30, %value.0.copyload.i
   %xor1.i.i.i = xor i64 %xor.i.i.i, %add.i32
   %and.i.i.i = and i64 %xor1.i.i.i, 16
@@ -1423,7 +1437,7 @@ entry:
   %cmp1.i.i.i = icmp ult i32 %add.i33, %value.0.copyload.i30
   %5 = or i1 %cmp.i.i.i, %cmp1.i.i.i
   %conv.i.i.i = trunc i32 %add.i33 to i8
-  %6 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i.i) #3, !range !10
+  %6 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i.i) #3, !range !11
   %xor.i.i.i = xor i32 %value.0.copyload.i30, %value.0.copyload.i
   %xor1.i.i.i = xor i32 %xor.i.i.i, %add.i33
   %and.i.i.i = and i32 %xor1.i.i.i, 16
@@ -1488,7 +1502,7 @@ entry:
   %cmp4.i.i.i = icmp ult i16 %add.i33, %value.0.copyload.i30
   %5 = or i1 %cmp.i.i.i, %cmp4.i.i.i
   %conv.i.i.i = trunc i16 %add.i33 to i8
-  %6 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i.i) #3, !range !10
+  %6 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i.i) #3, !range !11
   %xor4.i.i.i = xor i16 %value.0.copyload.i30, %value.0.copyload.i
   %xor35.i.i.i = xor i16 %xor4.i.i.i, %add.i33
   %7 = and i16 %xor35.i.i.i, 16
@@ -1554,7 +1568,7 @@ entry:
   %cmp.i.i.i = icmp ult i8 %add.i29, %conv.i
   %cmp4.i.i.i = icmp ult i8 %add.i29, %conv.i28
   %5 = or i1 %cmp.i.i.i, %cmp4.i.i.i
-  %6 = tail call i8 @llvm.ctpop.i8(i8 %add.i29) #3, !range !10
+  %6 = tail call i8 @llvm.ctpop.i8(i8 %add.i29) #3, !range !11
   %xor4.i.i.i38 = xor i16 %value.0.copyload.i25, %value.0.copyload.i
   %xor4.i.i.i = trunc i16 %xor4.i.i.i38 to i8
   %xor35.i.i.i = xor i8 %add.i29, %xor4.i.i.i
@@ -2674,7 +2688,7 @@ entry:
   %or.i = or i64 %value.0.copyload.i31, %value.0.copyload.i
   %neg.i = xor i64 %or.i, -1
   %conv.i.i.i = trunc i64 %neg.i to i8
-  %5 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i.i) #3, !range !10
+  %5 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i.i) #3, !range !11
   %cmp.i.i.i = icmp eq i64 %or.i, -1
   %6 = shl nuw nsw i8 %5, 2
   %7 = and i8 %6, 4
@@ -2720,7 +2734,7 @@ entry:
   %or3.i = or i32 %value.0.copyload.i31, %value.0.copyload.i
   %neg.i = xor i32 %or3.i, -1
   %conv.i.i.i = trunc i32 %neg.i to i8
-  %5 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i.i) #3, !range !10
+  %5 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i.i) #3, !range !11
   %cmp.i.i.i = icmp eq i32 %or3.i, -1
   %6 = shl nuw nsw i8 %5, 2
   %7 = and i8 %6, 4
@@ -2767,7 +2781,7 @@ entry:
   %or3.i = or i16 %value.0.copyload.i31, %value.0.copyload.i
   %neg.i = xor i16 %or3.i, -1
   %conv.i.i.i = trunc i16 %neg.i to i8
-  %5 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i.i) #3, !range !10
+  %5 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i.i) #3, !range !11
   %cmp.i.i.i = icmp eq i16 %or3.i, -1
   %6 = shl nuw nsw i8 %5, 2
   %7 = and i8 %6, 4
@@ -2814,7 +2828,7 @@ entry:
   %or3.i37 = or i16 %value.0.copyload.i26, %value.0.copyload.i
   %or3.i = trunc i16 %or3.i37 to i8
   %neg.i = xor i8 %or3.i, -1
-  %5 = tail call i8 @llvm.ctpop.i8(i8 %neg.i) #3, !range !10
+  %5 = tail call i8 @llvm.ctpop.i8(i8 %neg.i) #3, !range !11
   %cmp.i.i.i = icmp eq i8 %or3.i, -1
   %6 = shl nuw nsw i8 %5, 2
   %7 = and i8 %6, 4
@@ -2859,7 +2873,7 @@ entry:
   %and.i = and i64 %value.0.copyload.i31, %value.0.copyload.i
   %neg.i = xor i64 %and.i, -1
   %conv.i.i.i.i = trunc i64 %neg.i to i8
-  %5 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i.i.i) #3, !range !10
+  %5 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i.i.i) #3, !range !11
   %cmp.i.i.i.i = icmp eq i64 %and.i, -1
   %6 = shl nuw nsw i8 %5, 2
   %7 = and i8 %6, 4
@@ -2905,7 +2919,7 @@ entry:
   %and3.i = and i32 %value.0.copyload.i31, %value.0.copyload.i
   %neg.i = xor i32 %and3.i, -1
   %conv.i.i.i.i = trunc i32 %neg.i to i8
-  %5 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i.i.i) #3, !range !10
+  %5 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i.i.i) #3, !range !11
   %cmp.i.i.i.i = icmp eq i32 %and3.i, -1
   %6 = shl nuw nsw i8 %5, 2
   %7 = and i8 %6, 4
@@ -2952,7 +2966,7 @@ entry:
   %and3.i = and i16 %value.0.copyload.i31, %value.0.copyload.i
   %neg.i = xor i16 %and3.i, -1
   %conv.i.i.i.i = trunc i16 %neg.i to i8
-  %5 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i.i.i) #3, !range !10
+  %5 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i.i.i) #3, !range !11
   %cmp.i.i.i.i = icmp eq i16 %and3.i, -1
   %6 = shl nuw nsw i8 %5, 2
   %7 = and i8 %6, 4
@@ -2999,7 +3013,7 @@ entry:
   %and3.i37 = and i16 %value.0.copyload.i26, %value.0.copyload.i
   %and3.i = trunc i16 %and3.i37 to i8
   %neg.i = xor i8 %and3.i, -1
-  %5 = tail call i8 @llvm.ctpop.i8(i8 %neg.i) #3, !range !10
+  %5 = tail call i8 @llvm.ctpop.i8(i8 %neg.i) #3, !range !11
   %cmp.i.i.i.i = icmp eq i8 %and3.i, -1
   %6 = shl nuw nsw i8 %5, 2
   %7 = and i8 %6, 4
@@ -3052,7 +3066,7 @@ entry:
   %cmp.i.i24.i = icmp slt i64 %shl, 0
   %retval.0.i = select i1 %cmp.i.i, i1 %cmp.i.i.i, i1 %cmp.i.i24.i
   %conv.i.i55 = trunc i64 %shl to i8
-  %5 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i55) #3, !range !10
+  %5 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i55) #3, !range !11
   %6 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i = trunc i64 %6 to i8
   %tobool12.not = icmp eq i8 %conv.i, 0
@@ -3118,7 +3132,7 @@ entry:
   %cmp.i.i24.i = icmp slt i32 %shl, 0
   %retval.0.i = select i1 %cmp.i.i, i1 %cmp.i.i.i, i1 %cmp.i.i24.i
   %conv.i.i56 = trunc i32 %shl to i8
-  %5 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i56) #3, !range !10
+  %5 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i56) #3, !range !11
   %6 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i = trunc i64 %6 to i8
   %tobool12.not = icmp eq i8 %conv.i, 0
@@ -3207,7 +3221,7 @@ if.end9.i:                                        ; preds = %if.else.i
 _Z6CF_SHLItEbT_S0_S0_.exit:                       ; preds = %if.then.i, %if.then7.i, %if.end9.i
   %retval.0.i = phi i1 [ %cmp.i.i.i, %if.then.i ], [ %cmp.i.i24.i, %if.then7.i ], [ %tobool.i, %if.end9.i ]
   %conv.i.i61 = trunc i32 %shl to i8
-  %6 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i61) #3, !range !10
+  %6 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i61) #3, !range !11
   %7 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i = trunc i64 %7 to i8
   %tobool14.not = icmp eq i8 %conv.i, 0
@@ -3298,7 +3312,7 @@ if.end9.i:                                        ; preds = %if.else.i
 
 _Z6CF_SHLIhEbT_S0_S0_.exit:                       ; preds = %if.then.i, %if.then7.i, %if.end9.i
   %retval.0.i = phi i1 [ %cmp.i.i.i, %if.then.i ], [ %cmp.i.i19.i, %if.then7.i ], [ %tobool.i, %if.end9.i ]
-  %6 = tail call i8 @llvm.ctpop.i8(i8 %conv8) #3, !range !10
+  %6 = tail call i8 @llvm.ctpop.i8(i8 %conv8) #3, !range !11
   %7 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i60 = trunc i64 %7 to i8
   %tobool13.not = icmp eq i8 %conv.i60, 0
@@ -3367,7 +3381,7 @@ entry:
   %cmp.i29.i = icmp ne i64 %and.i28.i, 0
   %retval.0.i = select i1 %cmp.i.i, i1 %cmp.i26.i, i1 %cmp.i29.i
   %conv.i.i51 = trunc i64 %shr to i8
-  %5 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i51) #3, !range !10
+  %5 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i51) #3, !range !11
   %6 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i = trunc i64 %6 to i8
   %tobool12.not = icmp eq i8 %conv.i, 0
@@ -3431,7 +3445,7 @@ entry:
   %cmp.i29.i = icmp ne i32 %and3.i28.i, 0
   %retval.0.i = select i1 %cmp.i.i, i1 %cmp.i26.i, i1 %cmp.i29.i
   %conv.i.i52 = trunc i32 %shr to i8
-  %5 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i52) #3, !range !10
+  %5 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i52) #3, !range !11
   %6 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i = trunc i64 %6 to i8
   %tobool12.not = icmp eq i8 %conv.i, 0
@@ -3517,7 +3531,7 @@ if.end11.i:                                       ; preds = %if.else.i
 _Z6CF_SHRItEbT_S0_S0_.exit:                       ; preds = %if.then.i, %if.then8.i, %if.end11.i
   %retval.0.i = phi i1 [ %cmp.i26.i, %if.then.i ], [ %cmp.i29.i, %if.then8.i ], [ %tobool.i, %if.end11.i ]
   %conv.i.i56 = trunc i32 %shr to i8
-  %6 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i56) #3, !range !10
+  %6 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i56) #3, !range !11
   %7 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i = trunc i64 %7 to i8
   %tobool14.not = icmp eq i8 %conv.i, 0
@@ -3603,7 +3617,7 @@ if.end11.i:                                       ; preds = %if.else.i
 _Z6CF_SHRIhEbT_S0_S0_.exit:                       ; preds = %if.then.i, %if.then8.i, %if.end11.i
   %retval.0.in.i = phi i8 [ %and3.i20.i, %if.then.i ], [ %and3.i23.i, %if.then8.i ], [ %conv.i.i53, %if.end11.i ]
   %retval.0.i = icmp ne i8 %retval.0.in.i, 0
-  %6 = tail call i8 @llvm.ctpop.i8(i8 %conv8) #3, !range !10
+  %6 = tail call i8 @llvm.ctpop.i8(i8 %conv8) #3, !range !11
   %7 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i55 = trunc i64 %7 to i8
   %tobool13.not = icmp eq i8 %conv.i55, 0
@@ -3672,7 +3686,7 @@ entry:
   %shr.i = lshr i64 %value.0.copyload.i55, %sub.i
   %or.i = or i64 %shr.i, %shl.i
   %conv.i.i61 = trunc i64 %or.i to i8
-  %8 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i61) #3, !range !10
+  %8 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i61) #3, !range !11
   %9 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i = trunc i64 %9 to i8
   %tobool.not = icmp eq i8 %conv.i, 0
@@ -3751,7 +3765,7 @@ entry:
   %conv2.i65 = trunc i64 %shr.i to i32
   %or3.i = or i32 %shl.i, %conv2.i65
   %conv.i.i66 = trunc i32 %or3.i to i8
-  %8 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i66) #3, !range !10
+  %8 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i66) #3, !range !11
   %9 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i67 = trunc i64 %9 to i8
   %tobool.not = icmp eq i8 %conv.i67, 0
@@ -3832,7 +3846,7 @@ entry:
   %or3.i77 = or i64 %shr.i, %shl.i
   %or3.i = trunc i64 %or3.i77 to i16
   %conv.i.i66 = trunc i64 %or3.i77 to i8
-  %7 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i66) #3, !range !10
+  %7 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i66) #3, !range !11
   %8 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i67 = trunc i64 %8 to i8
   %tobool.not = icmp eq i8 %conv.i67, 0
@@ -3909,7 +3923,7 @@ entry:
   %shr.i = lshr i64 %conv.i50, %conv1.i51
   %or3.i62 = or i64 %shr.i, %shl.i
   %or3.i = trunc i64 %or3.i62 to i8
-  %7 = tail call i8 @llvm.ctpop.i8(i8 %or3.i) #3, !range !10
+  %7 = tail call i8 @llvm.ctpop.i8(i8 %or3.i) #3, !range !11
   %8 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i53 = trunc i64 %8 to i8
   %tobool.not = icmp eq i8 %conv.i53, 0
@@ -3979,7 +3993,7 @@ entry:
   %or.i = tail call i64 @llvm.fshr.i64(i64 %value.0.copyload.i55, i64 %value.0.copyload.i, i64 %and.i)
   %sub.i.i.i = add nsw i64 %and.i, -1
   %conv.i.i61 = trunc i64 %or.i to i8
-  %8 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i61) #3, !range !10
+  %8 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i61) #3, !range !11
   %9 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i = trunc i64 %9 to i8
   %tobool.not = icmp eq i8 %conv.i, 0
@@ -4060,7 +4074,7 @@ entry:
   %sub.i.i.i = add nsw i32 %and3.i, -1
   %conv1.i.i.i = zext i32 %sub.i.i.i to i64
   %conv.i.i66 = trunc i32 %or3.i to i8
-  %8 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i66) #3, !range !10
+  %8 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i66) #3, !range !11
   %9 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i67 = trunc i64 %9 to i8
   %tobool.not = icmp eq i8 %conv.i67, 0
@@ -4143,7 +4157,7 @@ entry:
   %sub.i.i.i = add nsw i16 %and3.i, -1
   %conv1.i.i.i = zext i16 %sub.i.i.i to i64
   %conv.i.i66 = trunc i64 %or3.i77 to i8
-  %7 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i66) #3, !range !10
+  %7 = tail call i8 @llvm.ctpop.i8(i8 %conv.i.i66) #3, !range !11
   %8 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i67 = trunc i64 %8 to i8
   %tobool.not = icmp eq i8 %conv.i67, 0
@@ -4222,7 +4236,7 @@ entry:
   %or3.i = trunc i64 %or3.i62 to i8
   %sub.i.i.i = add nsw i8 %and3.i, -1
   %conv1.i.i.i = zext i8 %sub.i.i.i to i64
-  %7 = tail call i8 @llvm.ctpop.i8(i8 %or3.i) #3, !range !10
+  %7 = tail call i8 @llvm.ctpop.i8(i8 %or3.i) #3, !range !11
   %8 = load i64, i64* @__undef, align 8, !tbaa !4
   %conv.i53 = trunc i64 %8 to i8
   %tobool.not = icmp eq i8 %conv.i53, 0
@@ -4316,84 +4330,84 @@ entry:
   call void @llvm.lifetime.start.p0i8(i64 128, i8* nonnull %0) #3
   %1 = load i64, i64* %rax, align 8, !tbaa !4
   %qword = getelementptr inbounds %struct.VirtualContext, %struct.VirtualContext* %ctx, i64 0, i32 0, i32 0, i32 0
-  store i64 %1, i64* %qword, align 8, !tbaa !8
+  store i64 %1, i64* %qword, align 8, !tbaa !9
   %2 = load i64, i64* %rbx, align 8, !tbaa !4
   %qword3 = getelementptr inbounds %struct.VirtualContext, %struct.VirtualContext* %ctx, i64 0, i32 1, i32 0, i32 0
-  store i64 %2, i64* %qword3, align 8, !tbaa !8
+  store i64 %2, i64* %qword3, align 8, !tbaa !9
   %3 = load i64, i64* %rcx, align 8, !tbaa !4
   %qword5 = getelementptr inbounds %struct.VirtualContext, %struct.VirtualContext* %ctx, i64 0, i32 2, i32 0, i32 0
-  store i64 %3, i64* %qword5, align 8, !tbaa !8
+  store i64 %3, i64* %qword5, align 8, !tbaa !9
   %4 = load i64, i64* %rdx, align 8, !tbaa !4
   %qword7 = getelementptr inbounds %struct.VirtualContext, %struct.VirtualContext* %ctx, i64 0, i32 3, i32 0, i32 0
-  store i64 %4, i64* %qword7, align 8, !tbaa !8
+  store i64 %4, i64* %qword7, align 8, !tbaa !9
   %5 = load i64, i64* %rsi, align 8, !tbaa !4
   %qword9 = getelementptr inbounds %struct.VirtualContext, %struct.VirtualContext* %ctx, i64 0, i32 4, i32 0, i32 0
-  store i64 %5, i64* %qword9, align 8, !tbaa !8
+  store i64 %5, i64* %qword9, align 8, !tbaa !9
   %6 = load i64, i64* %rdi, align 8, !tbaa !4
   %qword11 = getelementptr inbounds %struct.VirtualContext, %struct.VirtualContext* %ctx, i64 0, i32 5, i32 0, i32 0
-  store i64 %6, i64* %qword11, align 8, !tbaa !8
+  store i64 %6, i64* %qword11, align 8, !tbaa !9
   %7 = load i64, i64* %rbp, align 8, !tbaa !4
   %qword13 = getelementptr inbounds %struct.VirtualContext, %struct.VirtualContext* %ctx, i64 0, i32 6, i32 0, i32 0
-  store i64 %7, i64* %qword13, align 8, !tbaa !8
+  store i64 %7, i64* %qword13, align 8, !tbaa !9
   %8 = load i64, i64* %rsp, align 8, !tbaa !4
   %qword15 = getelementptr inbounds %struct.VirtualContext, %struct.VirtualContext* %ctx, i64 0, i32 7, i32 0, i32 0
-  store i64 %8, i64* %qword15, align 8, !tbaa !8
+  store i64 %8, i64* %qword15, align 8, !tbaa !9
   %9 = load i64, i64* %r8, align 8, !tbaa !4
   %qword17 = getelementptr inbounds %struct.VirtualContext, %struct.VirtualContext* %ctx, i64 0, i32 8, i32 0, i32 0
-  store i64 %9, i64* %qword17, align 8, !tbaa !8
+  store i64 %9, i64* %qword17, align 8, !tbaa !9
   %10 = load i64, i64* %r9, align 8, !tbaa !4
   %qword19 = getelementptr inbounds %struct.VirtualContext, %struct.VirtualContext* %ctx, i64 0, i32 9, i32 0, i32 0
-  store i64 %10, i64* %qword19, align 8, !tbaa !8
+  store i64 %10, i64* %qword19, align 8, !tbaa !9
   %11 = load i64, i64* %r10, align 8, !tbaa !4
   %qword21 = getelementptr inbounds %struct.VirtualContext, %struct.VirtualContext* %ctx, i64 0, i32 10, i32 0, i32 0
-  store i64 %11, i64* %qword21, align 8, !tbaa !8
+  store i64 %11, i64* %qword21, align 8, !tbaa !9
   %12 = load i64, i64* %r11, align 8, !tbaa !4
   %qword23 = getelementptr inbounds %struct.VirtualContext, %struct.VirtualContext* %ctx, i64 0, i32 11, i32 0, i32 0
-  store i64 %12, i64* %qword23, align 8, !tbaa !8
+  store i64 %12, i64* %qword23, align 8, !tbaa !9
   %13 = load i64, i64* %r12, align 8, !tbaa !4
   %qword25 = getelementptr inbounds %struct.VirtualContext, %struct.VirtualContext* %ctx, i64 0, i32 12, i32 0, i32 0
-  store i64 %13, i64* %qword25, align 8, !tbaa !8
+  store i64 %13, i64* %qword25, align 8, !tbaa !9
   %14 = load i64, i64* %r13, align 8, !tbaa !4
   %qword27 = getelementptr inbounds %struct.VirtualContext, %struct.VirtualContext* %ctx, i64 0, i32 13, i32 0, i32 0
-  store i64 %14, i64* %qword27, align 8, !tbaa !8
+  store i64 %14, i64* %qword27, align 8, !tbaa !9
   %15 = load i64, i64* %r14, align 8, !tbaa !4
   %qword29 = getelementptr inbounds %struct.VirtualContext, %struct.VirtualContext* %ctx, i64 0, i32 14, i32 0, i32 0
-  store i64 %15, i64* %qword29, align 8, !tbaa !8
+  store i64 %15, i64* %qword29, align 8, !tbaa !9
   %16 = load i64, i64* %r15, align 8, !tbaa !4
   %qword31 = getelementptr inbounds %struct.VirtualContext, %struct.VirtualContext* %ctx, i64 0, i32 15, i32 0, i32 0
-  store i64 %16, i64* %qword31, align 8, !tbaa !8
+  store i64 %16, i64* %qword31, align 8, !tbaa !9
   call void @HelperUnsupportedStub(%struct.VirtualContext* nonnull align 1 dereferenceable(128) %ctx) #3
-  %17 = load i64, i64* %qword, align 8, !tbaa !8
+  %17 = load i64, i64* %qword, align 8, !tbaa !9
   store i64 %17, i64* %rax, align 8, !tbaa !4
-  %18 = load i64, i64* %qword3, align 8, !tbaa !8
+  %18 = load i64, i64* %qword3, align 8, !tbaa !9
   store i64 %18, i64* %rbx, align 8, !tbaa !4
-  %19 = load i64, i64* %qword5, align 8, !tbaa !8
+  %19 = load i64, i64* %qword5, align 8, !tbaa !9
   store i64 %19, i64* %rcx, align 8, !tbaa !4
-  %20 = load i64, i64* %qword7, align 8, !tbaa !8
+  %20 = load i64, i64* %qword7, align 8, !tbaa !9
   store i64 %20, i64* %rdx, align 8, !tbaa !4
-  %21 = load i64, i64* %qword9, align 8, !tbaa !8
+  %21 = load i64, i64* %qword9, align 8, !tbaa !9
   store i64 %21, i64* %rsi, align 8, !tbaa !4
-  %22 = load i64, i64* %qword11, align 8, !tbaa !8
+  %22 = load i64, i64* %qword11, align 8, !tbaa !9
   store i64 %22, i64* %rdi, align 8, !tbaa !4
-  %23 = load i64, i64* %qword13, align 8, !tbaa !8
+  %23 = load i64, i64* %qword13, align 8, !tbaa !9
   store i64 %23, i64* %rbp, align 8, !tbaa !4
-  %24 = load i64, i64* %qword15, align 8, !tbaa !8
+  %24 = load i64, i64* %qword15, align 8, !tbaa !9
   store i64 %24, i64* %rsp, align 8, !tbaa !4
-  %25 = load i64, i64* %qword17, align 8, !tbaa !8
+  %25 = load i64, i64* %qword17, align 8, !tbaa !9
   store i64 %25, i64* %r8, align 8, !tbaa !4
-  %26 = load i64, i64* %qword19, align 8, !tbaa !8
+  %26 = load i64, i64* %qword19, align 8, !tbaa !9
   store i64 %26, i64* %r9, align 8, !tbaa !4
-  %27 = load i64, i64* %qword21, align 8, !tbaa !8
+  %27 = load i64, i64* %qword21, align 8, !tbaa !9
   store i64 %27, i64* %r10, align 8, !tbaa !4
-  %28 = load i64, i64* %qword23, align 8, !tbaa !8
+  %28 = load i64, i64* %qword23, align 8, !tbaa !9
   store i64 %28, i64* %r11, align 8, !tbaa !4
-  %29 = load i64, i64* %qword25, align 8, !tbaa !8
+  %29 = load i64, i64* %qword25, align 8, !tbaa !9
   store i64 %29, i64* %r12, align 8, !tbaa !4
-  %30 = load i64, i64* %qword27, align 8, !tbaa !8
+  %30 = load i64, i64* %qword27, align 8, !tbaa !9
   store i64 %30, i64* %r13, align 8, !tbaa !4
-  %31 = load i64, i64* %qword29, align 8, !tbaa !8
+  %31 = load i64, i64* %qword29, align 8, !tbaa !9
   store i64 %31, i64* %r14, align 8, !tbaa !4
-  %32 = load i64, i64* %qword31, align 8, !tbaa !8
+  %32 = load i64, i64* %qword31, align 8, !tbaa !9
   store i64 %32, i64* %r15, align 8, !tbaa !4
   call void @llvm.lifetime.end.p0i8(i64 128, i8* nonnull %0) #3
   ret void
@@ -4507,9 +4521,9 @@ define dso_local void @retainPointers() local_unnamed_addr #8 {
 entry:
   %call = tail call i64 @HelperKeepPC(i64 0, i64 1) #12
   %conv = trunc i64 %call to i8
-  store i8 %conv, i8* getelementptr inbounds ([0 x i8], [0 x i8]* @RAM, i64 0, i64 0), align 1, !tbaa !8
-  store i8 0, i8* getelementptr inbounds ([0 x i8], [0 x i8]* @GS, i64 0, i64 0), align 1, !tbaa !8
-  store i8 0, i8* getelementptr inbounds ([0 x i8], [0 x i8]* @FS, i64 0, i64 0), align 1, !tbaa !8
+  store i8 %conv, i8* getelementptr inbounds ([0 x i8], [0 x i8]* @RAM, i64 0, i64 0), align 1, !tbaa !9
+  store i8 0, i8* getelementptr inbounds ([0 x i8], [0 x i8]* @GS, i64 0, i64 0), align 1, !tbaa !9
+  store i8 0, i8* getelementptr inbounds ([0 x i8], [0 x i8]* @FS, i64 0, i64 0), align 1, !tbaa !9
   ret void
 }
 
@@ -4547,6 +4561,7 @@ attributes #12 = { noduplicate nomerge nounwind readnone willreturn }
 !5 = !{!"long", !6, i64 0}
 !6 = !{!"omnipotent char", !7, i64 0}
 !7 = !{!"Simple C++ TBAA"}
-!8 = !{!6, !6, i64 0}
-!9 = !{i64 2152664675, i64 2152664711, i64 2152664735}
-!10 = !{i8 0, i8 9}
+!8 = !{i64 4059}
+!9 = !{!6, !6, i64 0}
+!10 = !{i64 2152665066, i64 2152665102, i64 2152665126}
+!11 = !{i8 0, i8 9}

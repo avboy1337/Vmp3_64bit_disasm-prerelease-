@@ -42,6 +42,8 @@ pub enum HandlerVmInstruction {
     Fetch(usize),
     Store(usize),
     PushCr0,
+    PushCr3,
+    Rdtsc,
     Nop,
     VmExit,
     JumpDecVspChange,
@@ -127,6 +129,8 @@ impl Display for HandlerVmInstruction {
             HandlerVmInstruction::Fetch(size) => write!(f, "fetch{}", size * 8),
             HandlerVmInstruction::Store(size) => write!(f, "store{}", size * 8),
             HandlerVmInstruction::PushCr0 => write!(f, "push_cr0"),
+            HandlerVmInstruction::PushCr3 => write!(f, "push_cr3"),
+            HandlerVmInstruction::Rdtsc => write!(f, "rdtsc"),
             HandlerVmInstruction::Nop => write!(f, "nop"),
             HandlerVmInstruction::VmExit => write!(f, "vm_exit"),
             HandlerVmInstruction::JumpDecVspXchng => write!(f, "jump_dec_vsp_xchng"),
@@ -337,6 +341,22 @@ impl VmHandler {
                                          vm_context: &VmContext,
                                          reg_allocation: &VmRegisterAllocation)
                                          -> HandlerVmInstruction {
+        if vm_match_nop(self) {
+            return HandlerVmInstruction::Nop;
+        }
+
+        if vm_match_push_cr0(self) {
+            return HandlerVmInstruction::PushCr0;
+        }
+
+        if vm_match_push_cr3(self) {
+            return HandlerVmInstruction::PushCr3;
+        }
+
+        if vm_match_rdtsc(self) {
+            return HandlerVmInstruction::Rdtsc;
+        }
+
         if let Some(size) = vm_match_push_vsp(self, reg_allocation) {
             return HandlerVmInstruction::PushVsp(size);
         }
@@ -435,14 +455,6 @@ impl VmHandler {
 
         if let Some(size) = vm_match_shld(self, reg_allocation) {
             return HandlerVmInstruction::Shld(size);
-        }
-
-        if vm_match_nop(self) {
-            return HandlerVmInstruction::Nop;
-        }
-
-        if vm_match_push_cr0(self) {
-            return HandlerVmInstruction::PushCr0;
         }
 
         HandlerVmInstruction::UnknownNoOperand
@@ -1241,7 +1253,23 @@ fn vm_match_push_cr0(vm_handler: &VmHandler) -> bool {
     first_instruction.op1_register() == Register::CR0
 }
 
+fn vm_match_push_cr3(vm_handler: &VmHandler) -> bool {
+    let first_instruction = vm_handler.instructions[0];
+    (first_instruction.code() == Code::Mov_r64_cr) &&
+    first_instruction.op1_register() == Register::CR3
+}
+
+fn vm_match_rdtsc(vm_handler: &VmHandler) -> bool {
+    let first_instruction = vm_handler.instructions[0];
+    first_instruction.code() == Code::Rdtsc
+}
+
 fn vm_match_nop(vm_handler: &VmHandler) -> bool {
     let first_instruction = vm_handler.instructions[0];
     first_instruction.code() == Code::Lea_r64_m
 }
+
+// fn match_lock_xchng(vm_handler: &VmHandler) -> bool {
+//     let mut instruction_iter = vm_handler.instructions.iter();
+//     instruction_iter.any(|insn| insn.code() == Code::Xchg_rm64_r64 && insn.has_lock_prefix())
+// }

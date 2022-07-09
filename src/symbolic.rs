@@ -10,6 +10,7 @@ pub fn get_possible_solutions(function_name: &str) -> Result<Vec<u64>, Box<dyn E
     // println!("Pointer size = {}", project.pointer_size_bits());
 
     let mut config: Config<haybale::backend::DefaultBackend> = Default::default();
+    config.loop_bound = 1000;
     config.null_pointer_checking = NullPointerChecking::None;
 
     config.function_hooks.add("llvm.ctpop.i8", &|state, call| {
@@ -28,6 +29,12 @@ pub fn get_possible_solutions(function_name: &str) -> Result<Vec<u64>, Box<dyn E
                              let _arguments = call.get_arguments();
                              Ok(ReturnValue::Return(state.new_bv_with_name("fshl".into(),
                                                                            32)
+                                                         .unwrap()))
+                         });
+    config.function_hooks.add("llvm.x86.rdtsc", &|state, call| {
+                             let _arguments = call.get_arguments();
+                             Ok(ReturnValue::Return(state.new_bv_with_name("rdtsc".into(),
+                                                                           64)
                                                          .unwrap()))
                          });
     config.function_hooks.add_inline_asm_hook(&|state, call| {
