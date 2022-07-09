@@ -700,9 +700,10 @@ impl<'ctx> VmLifter<'ctx> {
                     stub_function: &FunctionValue) {
         let vsp = get_param_vsp(stub_function);
         let vip = get_param_vip(stub_function);
-        
+       
+        let vsp_val = self.builder.build_load(vsp, "vsp_val");
         let rsp_ptr = get_param_from_reg(&Registers::Rsp, stub_function);
-        self.builder.build_store(rsp_ptr, vsp);
+        self.builder.build_store(rsp_ptr, vsp_val);
 
         for reg in vm_context.push_order.iter().rev() {
             let sem_push_reg64 = self.get_semantic("SEM_POP_REG_64");
