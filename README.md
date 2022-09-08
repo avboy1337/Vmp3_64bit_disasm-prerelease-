@@ -1,8 +1,5 @@
 # Vmp3_64bit_disasm-prerelease- WIP WIP WIP
-Not all handlers supported yet!
-Basic branching supported!
-Currently working on loops and branches with more than 2 targets
-Comming soon !
+Some handlers are not supported, I cannot be asked to implement all the obscure ones lmao
 ## Info
 
 This project was tested on vgk.sys (sha-1 266ddd98fdd9df939993d947b0edb052a347316f)
